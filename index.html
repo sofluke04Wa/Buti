@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BEAUTY SHOP - หน้าแรก</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-pink-50 font-sans text-gray-800">
+
+  <!-- Navbar -->
+   <header class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-pink-600">BEAUTY SHOP</h1>
+      <nav class="space-x-4">
+        <a href="index.html" class="text-pink-600 font-semibold">หน้าแรก</a>
+        <a href="lipstick.html" class="text-gray-600 hover:text-pink-600">ลิปสติก</a>
+        <a href="sunscreen.html" class="text-gray-600 hover:text-pink-600">กันแดด</a>
+        <a href="serum.html" class="text-gray-600 hover:text-pink-600">เซรั่ม</a>
+        <a href="foundation.html" class="text-gray-600 hover:text-pink-600">รองพื้น</a>
+        <a href="basket.html" class="text-gray-600 hover:text-pink-600">ตะกร้าสินค้า 🛒</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="bg-pink-100 py-10">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <h2 class="text-4xl font-bold text-pink-700 mb-4">ค้นพบความสวยในแบบของคุณ</h2>
+      <p class="text-gray-700 mb-6">เรารวบรวมเครื่องสำอางคุณภาพ ราคาน่ารัก ส่งตรงถึงบ้านคุณ</p>
+      <a href="#products" class="bg-pink-500 text-white px-6 py-3 rounded shadow hover:bg-pink-600">ดูสินค้าทั้งหมด</a>
+    </div>
+  </section>
+
+  <!-- หมวดหมู่ -->
+  <section class="max-w-7xl mx-auto px-6 py-10">
+    <h3 class="text-2xl font-semibold text-pink-700 mb-6">หมวดหมู่สินค้า</h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-white p-4 rounded-xl text-center shadow hover:shadow-lg">
+        💄<div class="mt-2">ลิปสติก</div>
+      </div>
+      <div class="bg-white p-4 rounded-xl text-center shadow hover:shadow-lg">
+        🧴<div class="mt-2">รองพื้น</div>
+      </div>
+      <div class="bg-white p-4 rounded-xl text-center shadow hover:shadow-lg">
+        🌞<div class="mt-2">กันแดด</div>
+      </div>
+      <div class="bg-white p-4 rounded-xl text-center shadow hover:shadow-lg">
+        💧<div class="mt-2">เซรั่มบำรุงผิว</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- สินค้าแนะนำ -->
+  <section id="products" class="max-w-7xl mx-auto px-6 py-10">
+    <h3 class="text-2xl font-semibold text-pink-700 mb-6">สินค้าแนะนำ</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- สินค้า 1 -->
+      <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg">
+        <img src="https://via.placeholder.com/300x200?text=ลิปสติก" class="rounded mb-3" alt="ลิปสติก" />
+        <h4 class="text-lg font-semibold text-pink-700">ลิปสติก Velvet Kiss</h4>
+        <p class="text-pink-600 font-bold">฿299</p>
+      </div>
+
+      <!-- สินค้า 2 -->
+      <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg">
+        <img src="https://via.placeholder.com/300x200?text=รองพื้น" class="rounded mb-3" alt="รองพื้น" />
+        <h4 class="text-lg font-semibold text-pink-700">รองพื้น AirGlow</h4>
+        <p class="text-pink-600 font-bold">฿499</p>
+      </div>
+
+      <!-- สินค้า 3 -->
+      <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg">
+        <img src="https://via.placeholder.com/300x200?text=กันแดด" class="rounded mb-3" alt="กันแดด" />
+        <h4 class="text-lg font-semibold text-pink-700">กันแดด SunMate SPF50+</h4>
+        <p class="text-pink-600 font-bold">฿350</p>
+      </div>
+
+    </div>
+    <div class="mt-6 text-center">
+      <a href="#" class="text-pink-600 underline hover:text-pink-800">ดูสินค้าทั้งหมด</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-white py-6 mt-12 border-t">
+    <div class="max-w-7xl mx-auto px-6 text-center text-gray-500 text-sm">
+      © 2025 BEAUTY SHOP - All Rights Reserved.
+    </div>
+  </footer>
+
+</body>
+</html>

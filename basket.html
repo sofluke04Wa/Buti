@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ตะกร้าสินค้า - BEAUTY SHOP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+  <header class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-pink-600">BEAUTY SHOP</h1>
+      <nav class="space-x-4">
+        <a class="text-gray-600 hover:text-yellow-700" href="index.html">หน้าแรก</a>
+        <a class="text-gray-600 hover:text-yellow-700" href="lipstick.html">ลิปสติก</a>
+        <a class="text-gray-600 hover:text-yellow-700" href="sunscreen.html">กันแดด</a>
+        <a class="text-gray-600 hover:text-yellow-700" href="serum.html">เซรั่ม</a>
+        <a class="text-yellow-700 font-semibold" href="foundation.html">รองพื้น</a>
+        <a class="text-gray-600 hover:text-yellow-700" href="basket.html">ตะกร้าสินค้า 🛒</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="max-w-5xl mx-auto px-6 py-10">
+    <h2 class="text-2xl font-bold text-amber-700 mb-6">🛒 ตะกร้าสินค้าของคุณ</h2>
+    <table class="table-auto w-full text-center border border-gray-300 mb-4">
+      <thead class="bg-yellow-100">
+        <tr>
+          <th class="border px-4 py-2">รหัสสินค้า</th>
+          <th class="border px-4 py-2">ชื่อสินค้า</th>
+          <th class="border px-4 py-2">จำนวน</th>
+          <th class="border px-4 py-2">ราคา</th>
+          <th class="border px-4 py-2">รวม</th>
+        </tr>
+      </thead>
+      <tbody id="cartItems"></tbody>
+    </table>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <input id="customerName" type="text" placeholder="ชื่อผู้สั่ง" class="border rounded-lg px-4 py-2 w-full"/>
+      <input id="phone" type="text" placeholder="เบอร์โทร" class="border rounded-lg px-4 py-2 w-full"/>
+      <input id="province" type="text" placeholder="จังหวัด" class="border rounded-lg px-4 py-2 w-full"/>
+      <input id="district" type="text" placeholder="เขต/อำเภอ" class="border rounded-lg px-4 py-2 w-full"/>
+      <input id="address" type="text" placeholder="ที่อยู่โดยละเอียด" class="border rounded-lg px-4 py-2 w-full"/>
+    </div>
+
+    <div class="flex justify-end mt-4">
+      <button id="saveCartBtn" class="bg-pink-600 text-white px-6 py-2 rounded-lg shadow hover:bg-pink-700">
+        บันทึกตะกร้า
+      </button>
+    </div>
+  </section>
+
+  <script>
+    const APP_URL = "https://script.google.com/macros/s/AKfycbxIhAW0Ifu2DKTS3icZ7Q6eHcPdNXUxfVPv_D5iTaP5TMpIoqJcDe2kbQ3ahhWfz4DYmw/exec";
+
+    function renderCart() {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const tbody = document.getElementById("cartItems");
+      tbody.innerHTML = "";
+      let total = 0;
+
+      cart.forEach(item => {
+        const sum = (Number(item.qty) || 0) * (Number(item.price) || 0);
+        total += sum;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="border px-4 py-2">${item.code ?? ""}</td>
+          <td class="border px-4 py-2">${item.name ?? ""}</td>
+          <td class="border px-4 py-2">${item.qty ?? 0}</td>
+          <td class="border px-4 py-2">${item.price ?? 0}</td>
+          <td class="border px-4 py-2">${sum}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td colspan="4" class="border px-4 py-2 font-bold">รวมทั้งหมด</td>
+        <td class="border px-4 py-2 font-bold">${total}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    renderCart();
+
+    document.getElementById("saveCartBtn").addEventListener("click", async () => {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+      if(cart.length === 0){
+        Swal.fire("ตะกร้าว่าง", "กรุณาเพิ่มสินค้า", "warning");
+        return;
+      }
+
+      const name = document.getElementById("customerName").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const province = document.getElementById("province").value.trim();
+      const district = document.getElementById("district").value.trim();
+      const address = document.getElementById("address").value.trim();
+
+      if(!name || !phone || !province || !district || !address){
+        Swal.fire("กรอกไม่ครบ", "กรุณากรอกข้อมูลให้ครบ", "warning");
+        return;
+      }
+
+      Swal.fire({ title: "กำลังบันทึก...", allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+      const params = new URLSearchParams();
+      params.append("name", name);
+      params.append("phone", phone);
+      params.append("province", province);
+      params.append("district", district);
+      params.append("address", address);
+      params.append("cart", JSON.stringify(cart));
+      params.append("totalItems", cart.length);
+
+      try {
+        const res = await fetch(APP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+          body: params
+        });
+
+        const result = await res.json();
+
+        if(result.status === "success"){
+          Swal.fire("สำเร็จ", "บันทึกตะกร้าเรียบร้อย", "success");
+          localStorage.removeItem("cart");
+          renderCart();
+        } else {
+          Swal.fire("ผิดพลาด", result.message || "ไม่สามารถบันทึกได้", "error");
+        }
+      } catch(err){
+        console.error(err);
+        Swal.fire("เชื่อมต่อไม่สำเร็จ", err.message, "error");
+      }
+    });
+    function doPost(e) {
+  try {
+    const ss = SpreadsheetApp.openById("1qGT9gRjFtowZVjKXC2e_DlgtQgKj-Wd0v7Z6dD8M-k8");
+    const sheet = ss.getSheetByName("Orders") || ss.getSheets()[0];
+
+    const name = e.parameter.name || "";
+    const phone = e.parameter.phone || "";
+    const province = e.parameter.province || "";
+    const district = e.parameter.district || "";
+    const address = e.parameter.address || "";
+    const cart = JSON.parse(e.parameter.cart || "[]");
+
+    let totalAll = 0;
+
+    const rows = cart.map(item => {
+      const qty = Number(item.qty) || 0;
+      const price = Number(item.price) || 0;
+      const total = qty * price;
+      totalAll += total;
+      return [
+        new Date(),         // วันที่
+        name,               // ชื่อ
+        phone,              // เบอร์
+        province,           // จังหวัด
+        district,           // อำเภอ
+        address,            // ที่อยู่
+        item.code || "",    // รหัสสินค้า
+        item.name || "",    // ชื่อสินค้า
+        price,              // ราคา
+        qty,                // จำนวน
+        total               // รวม
+      ];
+    });
+
+    // ถ้ามีข้อมูลสินค้า -> บันทึกทีละบรรทัด
+    if (rows.length > 0) {
+      sheet.getRange(
+        sheet.getLastRow() + 1,
+        1,
+        rows.length,
+        rows[0].length
+      ).setValues(rows);
+
+      // บันทึกแถวรวมทั้งหมด ในคอลัมน์สุดท้าย (คอลัมน์ รวม)
+      sheet.appendRow([
+        "", "", "", "", "", "", "", "รวมทั้งหมด", "", "", totalAll
+      ]);
+    }
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: "success" }))
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: "error", message: err.message }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+  </script>
+</body>
+</html>
